@@ -1,0 +1,29 @@
+# if not install
+#pip install pycbc
+
+from pycbc.waveform import get_td_waveform
+import matplotlib.pyplot as plt
+from scipy.io.wavfile import write
+import numpy as np
+
+# Generate waveform
+hp, hc = get_td_waveform(approximant="SEOBNRv4_opt",
+                         mass1=10,
+                         mass2=9,
+                         delta_t=1.0/4096,
+                         f_lower=30)
+
+# Scale to audio range
+data = hp.numpy() / max(np.abs(hp.numpy()))  # Normalize amplitude
+data = (data * 32767).astype(np.int16)  # Convert to 16-bit audio
+
+# Save as a .wav file
+# write("gravitational_wave_chirp.wav", 4096, data)
+
+# Plot the waveform
+plt.plot(hp.sample_times, hp)
+plt.xlabel('Time (s)')
+plt.ylabel('Strain')
+plt.title('Simulated Gravitational Waveform')
+plt.show()
+

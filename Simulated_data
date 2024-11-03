@@ -1,4 +1,24 @@
-# if not install
+----------------------------------------------------
+''' "get_td_waveform" is a function from the PyCBC library that 
+generates time-domain gravitational waveforms based on physical parameters like the masses of the objects.
+----------------------------------------------------
+"write" (from scipy.io.wavfile): Used to save the waveform data as an audio file in .wav format.
+----------------------------------------------------
+"hp" and "hc" are the plus and cross polarization of GW 
+----------------------------------------------------
+The "SEOBNRv4_opt" ("Spin-aligned Effective One-Body Numerical Relativity")is a waveform model in gravitational wave research, 
+used to simulate the GW signals that provides physics of the inspiral, merger, and ringdown phases of binary black hole coalescences.
+----------------------------------------------------
+4096 Hz is standard sampe rate for GW data
+The time step between each data point in the generated waveform.
+----------------------------------------------------
+hp.numpy() : Converts the PyCBC waveform object hp to a numpy array for easier manipulation.
+----------------------------------------------------
+Scaling to 16-bit Range: (data * 32767).astype(np.int16)
+----------------------------------------------------
+
+
+# if not installed
 #pip install pycbc
 
 from pycbc.waveform import get_td_waveform
@@ -8,8 +28,8 @@ import numpy as np
 
 # Generate waveform
 hp, hc = get_td_waveform(approximant="SEOBNRv4_opt",
-                         mass1=10,
-                         mass2=9,
+                         mass1=30,   # set your interest mass values
+                         mass2=30,
                          delta_t=1.0/4096,
                          f_lower=30)
 
@@ -18,7 +38,7 @@ data = hp.numpy() / max(np.abs(hp.numpy()))  # Normalize amplitude
 data = (data * 32767).astype(np.int16)  # Convert to 16-bit audio
 
 # Save as a .wav file
-# write("gravitational_wave_chirp.wav", 4096, data)
+write("gravitational_wave_chirp.wav", 4096, data)
 
 # Plot the waveform
 plt.plot(hp.sample_times, hp)
